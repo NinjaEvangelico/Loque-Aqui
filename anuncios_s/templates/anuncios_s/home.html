@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Home - Loque{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Imóveis Disponíveis</h2>
+    <div class="row">
+        {% for anuncio in anuncios %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 border-0 shadow-lg">
+                {% if anuncio.fotos %}
+                <img src="{{ anuncio.fotos.url }}" class="card-img-top rounded" alt="Foto de {{ anuncio.local }}">
+                {% else %}
+                <img src="{% static 'default_image.jpg' %}" class="card-img-top rounded" alt="Sem foto">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title font-weight-bold">{{ anuncio.local }}</h5>
+                    <p class="card-text text-muted"><strong>Preço:</strong> R$ {{ anuncio.preco }}</p>
+                    <p class="card-text text-muted"><strong>Tipo de Contrato:</strong>
+                        {{anuncio.get_tipo_contrato_display }}</p>
+                    <p class="card-text">{{ anuncio.descricao|truncatechars:100 }}</p>
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <a href="{% url 'editar_anuncio' anuncio.pk %}" class="btn btn-primary btn-sm">Editar</a>
+                        <a href="{% url 'deletar_anuncio' anuncio.pk %}" class="btn btn-danger btn-sm">Deletar</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <p class="text-center text-muted">Nenhum anúncio disponível no momento.</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

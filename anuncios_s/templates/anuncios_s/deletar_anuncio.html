@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Deletar Anúncio - Loque{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Deletar Anúncio</h2>
+<p>Tem certeza que deseja deletar o anúncio de <strong>{{ anuncio.local }}</strong>?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-danger">Sim, deletar</button>
+    <a href="{% url 'home' %}" class="btn btn-secondary">Cancelar</a>
+</form>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "account/base_entrance.html" %}
+{% load i18n %}
+{% load allauth account %}
+{% load static %}
+
+{% block head_title %}
+{% trans "Entrar" %}
+{% endblock head_title %}
+
+{% block content %}
+<div class="px-4 py-5 px-md-5 text-center" style="background-color: hsl(0, 0%, 100%)">
+    <div class="container">
+        <div class="row gx-lg-5 justify-content-center">
+            <div class="col-lg-6 mb-5 mb-lg-0 text-center">
+                <h1 class="my-5 display-3 fw-bold ls-tight">
+                    {% trans "Entrar na sua conta" %} <br />
+                    <span class="text-primary">{% trans "e comece sua jornada" %}</span>
+                </h1>
+                <p style="color: hsl(217, 10%, 50.8%)">
+                    {% trans "Acesse sua conta para gerenciar seu perfil e configurações. Por favor, insira suas
+                    credenciais para continuar." %}
+                </p>
+            </div>
+
+            <div class="col-lg-6 mb-5 mb-lg-0 d-flex justify-content-center align-items-center">
+                <div class="card w-100" style="max-width: 500px;">
+                    <div class="card-body py-5 px-md-5">
+                        {% if not SOCIALACCOUNT_ONLY %}
+                        <form method="post" action="{% url 'account_login' %}">
+                            {% csrf_token %}
+
+                            <!-- Logo -->
+                            <div class="text-center mb-4">
+                                <img src="{% static 'images/logo.png' %}" alt="Logo"
+                                    style="width: 100px; height: auto;">
+                            </div>
+
+                            <!-- E-mail input -->
+                            <div class="form-group mb-4">
+                                <div class="form-outline">
+                                    <input type="email" id="id_login" name="login" class="form-control" required />
+                                    <label class="form-label" for="id_login">{% trans "Endereço de email" %}</label>
+                                </div>
+                            </div>
+
+                            <!-- Password input -->
+                            <div class="form-group mb-4">
+                                <div class="form-outline">
+                                    <input type="password" id="id_password" name="password" class="form-control"
+                                        required />
+                                    <label class="form-label" for="id_password">{% trans "Senha" %}</label>
+                                </div>
+                            </div>
+
+                            <div class="form-check d-flex justify-content-center mb-4">
+                                <input class="form-check-input me-2" type="checkbox" value="" id="id_remember_me" />
+                                <label class="form-check-label" for="id_remember_me">
+                                    {% trans "Lembrar de mim" %}
+                                </label>
+                            </div>
+
+                            {{ redirect_field }}
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary btn-block mb-4">
+                                    {% trans "Entrar" %}
+                                </button>
+                            </div>
+                        </form>
+                        <p class="text-center">
+                            {% blocktranslate %}Se você ainda não criou uma conta, por favor <a
+                                href="{{ signup_url }}">registre-se</a> primeiro.{% endblocktranslate %}
+                        </p>
+                        {% endif %}
+
+                        {% if LOGIN_BY_CODE_ENABLED or PASSKEY_LOGIN_ENABLED %}
+                        <hr>
+                        <div class="text-center">
+                            {% if PASSKEY_LOGIN_ENABLED %}
+                            <button type="submit" form="mfa_login" id="passkey_login"
+                                class="btn btn-outline-primary btn-block">
+                                {% trans "Entrar com uma chave de acesso" %}
+                            </button>
+                            {% endif %}
+                            {% if LOGIN_BY_CODE_ENABLED %}
+                            <a href="{{ request_login_code_url }}" class="btn btn-outline-primary btn-block">
+                                {% trans "Enviar um código de entrada por e-mail" %}
+                            </a>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
+                        {% if SOCIALACCOUNT_ENABLED %}
+                        <hr>
+                        <div class="text-center">
+                            {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% block extra_body %}
+{{ block.super }}
+{% if PASSKEY_LOGIN_ENABLED %}
+{% include "mfa/webauthn/snippets/login_script.html" with button_id="passkey_login" %}
+{% endif %}
+{% endblock %}

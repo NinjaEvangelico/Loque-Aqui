@@ -1,0 +1,48 @@
+{% extends "account/base_entrance.html" %}
+{% load allauth i18n %}
+{% block head_title %}
+{% trans "Cadastro" %}
+{% endblock head_title %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header text-center bg-primary text-white">
+                    <h2 class="fw-bold my-2">{% trans "Cadastre-se" %}</h2>
+                </div>
+                <div class="card-body p-4">
+                    <p class="text-center">
+                        {% trans "Já tem uma conta?" %}
+                        <a href="{{ login_url }}" class="text-primary fw-bold">{% trans "Entrar" %}</a>.
+                    </p>
+
+                    {% if not SOCIALACCOUNT_ONLY %}
+                    {% url 'account_signup' as action_url %}
+                    <form method="post" action="{{ action_url }}" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        {% element fields form=form unlabeled=True %}
+                        {% endelement %}
+                        {{ redirect_field }}
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                {% trans "Cadastre-se" %}
+                            </button>
+                        </div>
+                    </form>
+                    {% endif %}
+
+                    {% if SOCIALACCOUNT_ENABLED %}
+                    <hr class="my-4">
+                    <div class="text-center">
+                        {% include "socialaccount/snippets/login.html" with page_layout="entrance" %}
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}
