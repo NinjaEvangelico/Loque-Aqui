@@ -1,3 +1,4 @@
+from pyexpat.errors import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Anuncio
 from .forms import AnuncioForm
@@ -17,7 +18,8 @@ def novo_anuncio(request):
              anuncio = form.save(commit=False)
              anuncio.usuario = request.user  # Atribui o usuário logado
              anuncio.save()
-        return redirect('home')
+             messages.success(request, "Anúncio criado com sucesso!")
+        return redirect('/')
     else:
         form = AnuncioForm()
     return render(request, 'anuncios_s/novo_anuncio.html', {'form': form})

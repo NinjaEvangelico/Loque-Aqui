@@ -3,9 +3,9 @@ from django.contrib.auth.models import User
 
 class Anuncio(models.Model):
     TIPO_CONTRATO_CHOICES = [
-        ('longo', 'Longo Prazo'),
-        ('medio', 'Médio Prazo'),
-        ('curto', 'Curto Prazo'),
+        ('anual', 'Anual'),
+        ('mensal', 'Mensal'),
+        ('semanal', 'Semanal'),
         ('diaria', 'Diária'),
     ]
 
