@@ -18,7 +18,7 @@ def novo_anuncio(request):
              anuncio = form.save(commit=False)
              anuncio.usuario = request.user  # Atribui o usuário logado
              anuncio.save()
-             messages.success(request, "Anúncio criado com sucesso!")
+            #  messages.success(request, "Anúncio criado com sucesso!")
         return redirect('/')
     else:
         form = AnuncioForm()
