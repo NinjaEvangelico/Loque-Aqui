@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <!-- Limitar tamanho da imagem -->
+        <img src="{{ anuncio.fotos.url }}" class="card-img-top rounded" alt="Foto de {{ anuncio.local }}"
+            style="max-width: 75%; height: auto;">
+        <div class="card-body">
+            <h5 class="card-title">{{ anuncio.local }}</h5>
+            <p class="card-text">{{ anuncio.descricao }}</p>
+            <p class="card-text"><small class="text-muted">Criado em {{ anuncio.data_criacao }}</small></p>
+            <p class="card-text"><small class="text-muted">Criado por: {{ anuncio.usuario.username }}</small></p>
+
+            <!-- Botões de edição e exclusão visíveis apenas para o usuário que criou o anúncio -->
+            {% if user.is_authenticated %}
+            {% if user == anuncio.usuario %}
+            <a href="{% url 'editar_anuncio' anuncio.pk %}" class="btn btn-primary btn-sm">Editar</a>
+            <!-- Formulário para exclusão com confirmação -->
+            <form action="{% url 'deletar_anuncio' anuncio.pk %}" method="post" style="display:inline;"
+                onsubmit="return confirm('Tem certeza de que deseja excluir este anúncio?');">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger btn-sm">Deletar</button>
+            </form>
+            {% endif %}
+            <!-- Botão de reserva visível apenas se o usuário não for o criador do anúncio -->
+            {% if user != anuncio.usuario %}
+            <a href="{% url 'reservar_anuncio' anuncio.pk %}" class="btn btn-success btn-lg">Reservar</a>
+            {% endif %}
+            {% else %}
+            <!-- Botão de reserva visível apenas para usuários não autenticados -->
+            <a href="{% url 'login' %}" class="btn btn-success btn-lg">Reservar</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

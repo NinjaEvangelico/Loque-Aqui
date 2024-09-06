@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1>Minhas Reservas</h1>
+    <ul class="list-group">
+        {% for reserva in reservas %}
+        <li class="list-group-item d-flex align-items-center">
+            <!-- Exibe a imagem do anúncio -->
+            <div class="me-3">
+                {% if reserva.anuncio.fotos %}
+                <img src="{{ reserva.anuncio.fotos.url }}" alt="Foto de {{ reserva.anuncio.local }}"
+                    class="img-thumbnail" style="width: 100px; height: 75px; object-fit: cover;">
+                {% else %}
+                <img src="{% static 'default_image.jpg' %}" alt="Sem foto" class="img-thumbnail"
+                    style="width: 100px; height: 75px; object-fit: cover;">
+                {% endif %}
+            </div>
+            <div>
+                <h5>{{ reserva.anuncio.local }}</h5>
+                <p>Data de Início: {{ reserva.data_inicio }}</p>
+                <p>Data de Fim: {{ reserva.data_fim }}</p>
+                {% if not reserva.cancelada %}
+                <form action="{% url 'cancelar_reserva' reserva.pk %}" method="post" style="display:inline;"
+                    onsubmit="return confirmCancel()">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Cancelar Reserva</button>
+                </form>
+                {% else %}
+                <p><small class="text-muted">Reserva cancelada</small></p>
+                {% endif %}
+            </div>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+
+<script type="text/javascript">
+    function confirmCancel() {
+        return confirm('Tem certeza de que deseja cancelar a reserva?');
+    }
+</script>
+
+{% endblock %}

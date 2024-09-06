@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap5',
     'allauth',
     'allauth.account',
+    'reservas',
 ]
 
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"

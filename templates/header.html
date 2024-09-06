@@ -19,8 +19,8 @@
                 {{ user.username }}
             </button>
             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <li><a class="dropdown-item" href="#">Meus Anuncios</a></li>
-                <li><a class="dropdown-item" href="#">Minhas Reservas</a></li>
+                <li><a class="dropdown-item" href="{% url 'meus_anuncios' %}">Meus Anuncios</a></li>
+                <li><a class="dropdown-item" href="{% url 'minhas_reservas' %}">Minhas Reservas</a></li>
                 <li><a class="dropdown-item" href="{% url 'account_logout' %}">Log Out</a></li>
             </ul>
         </div>

@@ -12,6 +12,7 @@ class Anuncio(models.Model):
     local = models.CharField(max_length=255)
     preco = models.DecimalField(max_digits=10, decimal_places=2)
     tipo_contrato = models.CharField(max_length=10, choices=TIPO_CONTRATO_CHOICES)
+    disponivel = models.BooleanField(default=True) 
     descricao = models.TextField()
     fotos = models.ImageField(upload_to='anuncios/', blank=True, null=True)
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -19,3 +20,7 @@ class Anuncio(models.Model):
 
     def __str__(self):
         return f"{self.local} - {self.get_tipo_contrato_display()} - R$ {self.preco}"
+
+    def mudar_status(self):
+        self.disponivel = not self.disponivel
+        self.save()
